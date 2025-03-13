@@ -109,8 +109,11 @@ def calculate_confidence(input_data, prediction):
     if ph < 4 or ph > 9:
         base_confidence -= 12
     
-    # Add a small random variation
-    np.random.seed(int(sum(input_data.values()) * 100) % 10000)
+    # Add a small random variation - using only numeric values for seed
+    # Filter out non-numeric values to avoid the type error
+    numeric_values = [v for v in input_data.values() if isinstance(v, (int, float))]
+    seed_value = int(sum(numeric_values) * 100) % 10000
+    np.random.seed(seed_value)
     random_adjustment = np.random.uniform(-5, 5)
     
     # Ensure confidence stays within reasonable bounds
